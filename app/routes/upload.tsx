@@ -1,5 +1,3 @@
-import { prepareInstructions } from "constants";
-import { AIResponseFormat } from "constants";
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
 import FileUploader from "~/components/FIleUploader";
@@ -8,6 +6,8 @@ import Navbar from "~/components/Navbar";
 import { convertPdfToImage } from "~/lib/pdf2img";
 import { usePuterStore } from "~/lib/puter";
 import { generateUUID } from "~/lib/util";
+import {prepareInstructions} from "../../constants";
+
 
 const upload = () => {
   const { auth, isLoading, fs, ai, kv } = usePuterStore();
@@ -66,7 +66,17 @@ const upload = () => {
       prepareInstructions({ jobTitle, jobDescription })
     );
 
-    
+    if(!feedback) return setStatusText('Error: Failed to analyze resume');
+
+    const feedbackText = typeof feedback.message.content === "string"
+      ? feedback.message.content
+      : feedback.message.content[0].text;
+
+    data.feedback = JSON.parse(feedbackText);
+
+    await kv.set(`resume:${uuid}`, JSON.stringify(data));
+    setStatusText("Analysis complete!, redirecting...");
+    navigate(`/resume/${uuid}`);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
