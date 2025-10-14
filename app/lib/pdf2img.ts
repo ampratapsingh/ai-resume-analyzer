@@ -20,6 +20,10 @@ async function loadPdfJs(): Promise<any> {
     pdfjsLib = lib;
     isLoading = false;
     return lib;
+  }).catch((error) => {
+    isLoading = false;
+    loadPromise = null;
+    throw new Error(`Failed to load PDF.js: ${error.message}`);
   });
 
   return loadPromise;
@@ -33,21 +37,36 @@ export async function convertPdfToImage(
 
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await lib.getDocument({ data: arrayBuffer }).promise;
+    
+    if (pdf.numPages === 0) {
+      return {
+        imageUrl: "",
+        file: null,
+        error: "PDF has no pages",
+      };
+    }
+    
     const page = await pdf.getPage(1);
 
     const viewport = page.getViewport({ scale: 4 });
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
 
+    if (!context) {
+      return {
+        imageUrl: "",
+        file: null,
+        error: "Failed to get canvas context",
+      };
+    }
+
     canvas.width = viewport.width;
     canvas.height = viewport.height;
 
-    if (context) {
-      context.imageSmoothingEnabled = true;
-      context.imageSmoothingQuality = "high";
-    }
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = "high";
 
-    await page.render({ canvasContext: context!, viewport }).promise;
+    await page.render({ canvasContext: context, viewport }).promise;
 
     return new Promise((resolve) => {
       canvas.toBlob(
@@ -76,10 +95,11 @@ export async function convertPdfToImage(
       ); // Set quality to maximum (1.0)
     });
   } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
     return {
       imageUrl: "",
       file: null,
-      error: `Failed to convert PDF: ${err}`,
+      error: `Failed to convert PDF: ${errorMessage}`,
     };
   }
 }
