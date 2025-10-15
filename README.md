@@ -123,14 +123,6 @@ NextHire-AI-Resume-Analyzer/
 
 ---
 
-## 💬 Community
-
-Join our **developer Discord community** to share your progress, ask questions, and collaborate with thousands of other creators.
-
-> 💡 *Build smarter. Hire faster. With NextHire.*
-
----
-
 ## 👨‍💻 Author
 
 **Developed by [Amit Singh](https://github.com/ampratapsingh)**
