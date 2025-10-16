@@ -1,5 +1,5 @@
 
-# 🚀 NextHire AI Resume Analyzer
+# 🚀 NextHire - AI Resume Analyzer
 
 ✨ **Introduction**
 Welcome to **NextHire AI Resume Analyzer** — an intelligent, browser-based application built with **React, React Router, and Puter.js**.
