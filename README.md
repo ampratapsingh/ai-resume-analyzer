@@ -105,24 +105,6 @@ Then open:
 
 ---
 
-## 🧱 Folder Structure
-
-```
-NextHire-AI-Resume-Analyzer/
-├── src/
-│   ├── components/     # Reusable UI components
-│   ├── pages/          # Route-based pages
-│   ├── hooks/          # Custom React hooks
-│   ├── store/          # Zustand store
-│   ├── utils/          # Helper functions
-│   └── App.tsx         # Main app file
-├── public/              # Static assets
-├── package.json
-└── vite.config.ts
-```
-
----
-
 ## 👨‍💻 Author
 
 **Developed by [Amit Singh](https://github.com/ampratapsingh)**
